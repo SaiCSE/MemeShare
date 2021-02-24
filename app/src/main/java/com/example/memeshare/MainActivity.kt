@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // loadMeme() - calling this function will give us a string response
+        loadMeme()  // calling this function will give us a response
     }
 
 
@@ -61,40 +62,27 @@ Log.d("Success Response" , response.substring(0, 500))            },
     //we need to get the json response for the meme api
 
     private fun loadMeme () {
-        val textView = findViewById<TextView>(R.id.text)
-// ...
 
 // Instantiate the RequestQueue.
-        val queue = Volley.newRequestQueue(this)
+        val queue= Volley.newRequestQueue(this)
 
 // Request a string response from the provided URL.
-        val url = "https://reddit-meme-api.herokuapp.com/"
+        val url = "https://meme-api.herokuapp.com/gimme"
 
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
-            Response.Listener {response -> val url = response.getString("url")},
-            Response.ErrorListener {}
+            Response.Listener {response -> val url = response.getString("url")
+                Glide.with(this).load(url).into(memeImageView)
+            },
+            Response.ErrorListener {
+                Toast.makeText(this, "Something Went Wrong", Toast.LENGTH_LONG).show()
+            }
         )
 
 // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
 
 
-Glide.with(this).load(url).into(memeImageView)
 
-
-
-
-        fun shareMeme(view: View) {
-
-
-    }
-
-
-
-    fun nextMeme(view: View) {
-
-
-    }
 }
 
     fun nextMeme(view: View) {}
