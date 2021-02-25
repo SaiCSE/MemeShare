@@ -58,19 +58,20 @@ Log.d("Success Response" , response.substring(0, 500))            },
 
 
 
-    //Created a private function loadMeme, which takes the volley code
+    // 1. Created a private function loadMeme, which takes the volley code
     //we need to get the json response for the meme api
 
     private fun loadMeme () {
 
-// Instantiate the RequestQueue.
+// 2. Instantiate the RequestQueue.
         val queue= Volley.newRequestQueue(this)
 
-// Request a string response from the provided URL.
+// 3. Request a string response from the provided URL.
         val url = "https://meme-api.herokuapp.com/gimme"
 
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
             Response.Listener {response -> val url = response.getString("url")
+                //4. Use Glide to Load the image into the ImageView
                 Glide.with(this).load(url).into(memeImageView)
             },
             Response.ErrorListener {
@@ -78,12 +79,13 @@ Log.d("Success Response" , response.substring(0, 500))            },
             }
         )
 
-// Add the request to the RequestQueue.
+// 5. Add the request to the RequestQueue.
         queue.add(jsonObjectRequest)
 
 
 
 }
+
 
     fun nextMeme(view: View) {}
     fun shareMeme(view: View) {}
