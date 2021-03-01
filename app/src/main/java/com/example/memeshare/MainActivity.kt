@@ -74,14 +74,19 @@ Log.d("Success Response" , response.substring(0, 500))            },
     private fun loadMeme () {
 
         //7. we need to show the progress bar when the loadMeme Function is called
-        progresBar.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
+
 
 
 // 2. Instantiate the RequestQueue.
-        val queue= Volley.newRequestQueue(this)
+// val queue= Volley.newRequestQueue(this)
+//  12.  we don`t require the above line of code, anymore because, we use a singleton volley pattern
+
+
 
 // 3. Request a string response from the provided URL.
         val url = "https://meme-api.herokuapp.com/gimme"
+
 
 
 //4. Getting the url data into jsonObject
@@ -90,8 +95,8 @@ Log.d("Success Response" , response.substring(0, 500))            },
                Response.Listener  {response -> currentImageUrl = response.getString("url")
 
 
-                    //5. Use Glide to Load the image into the ImageView, this will directly load the photo in the view
-//                      Glide.with(this).load(url).into(memeImageView)
+                   // 5. Use Glide to Load the image into the ImageView, this will directly load the photo in the view
+                  //  Glide.with(this).load(url).into(memeImageView)
 
                     //8.In order to vanish the progressBar when meme/photo loads or not, we put a listner in the glide method
                     //This listner method is interface that tells, what to do when image load passes or fails
@@ -103,7 +108,7 @@ Log.d("Success Response" , response.substring(0, 500))            },
                                  target: Target<Drawable>?,
                                  isFirstResource: Boolean
                                 ): Boolean {
-                            progresBar.visibility = View.GONE
+                            progressBar.visibility = View.GONE
                             return false;
                         }
 
@@ -114,7 +119,7 @@ Log.d("Success Response" , response.substring(0, 500))            },
                                  dataSource: DataSource?,
                                  isFirstResource: Boolean
                                   ): Boolean {
-                            progresBar.visibility = View.GONE
+                            progressBar.visibility = View.GONE
                             return false;
                         }
 
@@ -132,7 +137,11 @@ Log.d("Success Response" , response.substring(0, 500))            },
 
 
 // 6. Add the request to the RequestQueue.
-        queue.add(jsonObjectRequest)
+//   queue.add(jsonObjectRequest)
+
+// 13. We will not use the above line of code to request the Queue, instead we will use the singleton pattern way of adding the json object to Queue
+// We call the Queue form the MySingleton class
+    MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
 
 
 
@@ -153,7 +162,7 @@ Log.d("Success Response" , response.substring(0, 500))            },
         // There can be many actions that we can choose from here,we choose the send action
         val intent = Intent(Intent.ACTION_SEND)
         intent.putExtra(Intent.EXTRA_TEXT, "Hey,Checkout this cool meme i found out on Reddit! $currentImageUrl")
-        //Here we chhose which ty[es of apps should pop up for sharing, so below we choose any type of text sharing app
+        //Here we choose which ty[es of apps should pop up for sharing, so below we choose any type of text sharing app
         intent.type = "text/plain"
         //Now we need to create a chooser [ that helps us in choosing the apps for sharing]
         val chooser = Intent.createChooser(intent, "Share this meme using...")
